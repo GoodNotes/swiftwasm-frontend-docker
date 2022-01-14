@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y openjdk-11-jre-headless nodejs \
 RUN npm install --global yarn
 
 # Intall swift lint from docker
-COPY --from=swiftLint /usr/bin/* /usr/bin
+COPY --from=swiftLint /usr/bin/swiftlint /usr/bin/swiftlint
 
 # Print Installed Versions
 RUN swift --version
