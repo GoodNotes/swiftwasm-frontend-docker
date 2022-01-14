@@ -11,3 +11,14 @@ RUN apt-get install openjdk-11-jre-headless -y
 # Install node
 RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
 RUN apt-get install -y nodejs
+
+# Install yarn
+RUN npm install --global yarn
+
+# Print Installed Versions
+RUN swift --version
+RUN carton --version
+RUN node --version
+RUN npm --version
+RUN npx --version
+RUN yarn --version
