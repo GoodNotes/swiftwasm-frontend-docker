@@ -35,3 +35,4 @@ RUN npm --version
 RUN npx --version
 RUN yarn --version
 RUN swiftlint --version
+RUN cypress --version
