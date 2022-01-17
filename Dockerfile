@@ -1,6 +1,16 @@
 ARG SWIFLINT_DOCKER_IMAGE
 ARG CARTON_DOCKER_IMAGE
 
+FROM ubuntu:latest as binaryen
+
+RUN apt-get update && apt-get install -y curl
+RUN curl -L -v -o binaryen.tar.gz https://github.com/WebAssembly/binaryen/releases/download/version_105/binaryen-version_105-x86_64-linux.tar.gz
+RUN tar xzvf binaryen.tar.gz
+
+
+ARG SWIFLINT_DOCKER_IMAGE
+ARG CARTON_DOCKER_IMAGE
+
 FROM $SWIFLINT_DOCKER_IMAGE as swiftLint
 
 
@@ -30,6 +40,9 @@ COPY --from=swiftLint /usr/lib/libsourcekitdInProc.so /usr/lib
 COPY --from=swiftLint /usr/lib/swift/linux/libBlocksRuntime.so /usr/lib
 COPY --from=swiftLint /usr/lib/swift/linux/libdispatch.so /usr/lib
 
+# Install latest binaryen tools (carton still uses some legacy version)
+COPY --from=binaryen binaryen-version_105/bin/* /usr/local/bin
+
 # Print Installed Versions
 RUN swift --version
 RUN carton --version
@@ -39,3 +52,4 @@ RUN npx --version
 RUN yarn --version
 RUN swiftlint --version
 RUN cypress --version
+RUN wasm-opt --version
