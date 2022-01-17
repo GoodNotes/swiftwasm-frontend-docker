@@ -26,6 +26,9 @@ RUN npm install --global cypress@${CYPRESS_VERSION}
 
 # Intall swift lint from docker
 COPY --from=swiftLint /usr/bin/swiftlint /usr/bin/swiftlint
+COPY --from=swiftLint /usr/lib/libsourcekitdInProc.so /usr/lib
+COPY --from=swiftLint /usr/lib/swift/linux/libBlocksRuntime.so /usr/lib
+COPY --from=swiftLint /usr/lib/swift/linux/libdispatch.so /usr/lib
 
 # Print Installed Versions
 RUN swift --version
