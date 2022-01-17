@@ -30,7 +30,7 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
         registry: ghcr.io
-    
+        
     - name: Set lowercase repository name
       run: |
         echo "REPOSITORY_LC=${REPOSITORY,,}" >>${GITHUB_ENV}
@@ -41,3 +41,9 @@ jobs:
       with:
         push: true
         tags: ghcr.io/${{ env.REPOSITORY_LC }}:${{ env.DOCKER_TAG }} 
+        build-args: |
+          SWIFLINT_DOCKER_IMAGE=ghcr.io/norio-nomura/swiftlint:0.45.1_swift-5.5.0
+          CARTON_DOCKER_IMAGE=ghcr.io/swiftwasm/carton:0.12.1
+          NODE_VERSION=16.x
+          OPEN_JDK_VERSION=11
+          CYPRESS_VERSION=9.2.0
