@@ -1,7 +1,7 @@
-ARG SWIFLINT_DOCKER_IMAGE
-ARG CARTON_DOCKER_IMAGE
+# ARG SWIFLINT_DOCKER_IMAGE
+# ARG CARTON_DOCKER_IMAGE
 
-FROM $SWIFLINT_DOCKER_IMAGE as swiftLint
+# FROM $SWIFLINT_DOCKER_IMAGE as swiftLint
 
 
 ARG CARTON_DOCKER_IMAGE
@@ -24,11 +24,11 @@ RUN npm install --global yarn
 # Install cypress
 RUN npm install --global cypress@${CYPRESS_VERSION}
 
-# Intall swift lint from docker
-COPY --from=swiftLint /usr/bin/swiftlint /usr/bin/swiftlint
-COPY --from=swiftLint /usr/lib/libsourcekitdInProc.so /usr/lib
-COPY --from=swiftLint /usr/lib/swift/linux/libBlocksRuntime.so /usr/lib
-COPY --from=swiftLint /usr/lib/swift/linux/libdispatch.so /usr/lib
+# # Intall swift lint from docker
+# COPY --from=swiftLint /usr/bin/swiftlint /usr/bin/swiftlint
+# COPY --from=swiftLint /usr/lib/libsourcekitdInProc.so /usr/lib
+# COPY --from=swiftLint /usr/lib/swift/linux/libBlocksRuntime.so /usr/lib
+# COPY --from=swiftLint /usr/lib/swift/linux/libdispatch.so /usr/lib
 
 # Print Installed Versions
 RUN swift --version
@@ -37,5 +37,5 @@ RUN node --version
 RUN npm --version
 RUN npx --version
 RUN yarn --version
-RUN swiftlint --version
+# RUN swiftlint --version
 RUN cypress --version
