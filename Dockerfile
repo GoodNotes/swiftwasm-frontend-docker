@@ -27,6 +27,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     libcurl4 \
     libxml2 \
     libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb \
+    brotli \
     && rm -rf /var/lib/apt/lists/*
 
 # Install yarn
@@ -54,3 +55,4 @@ RUN yarn --version
 RUN swiftlint --version
 RUN cypress --version
 RUN wasm-opt --version
+RUN brotli --version
