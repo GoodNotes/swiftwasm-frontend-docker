@@ -51,4 +51,16 @@ Here you are a list of the tagged dockers with the specific tools version includ
 - SwiftLint => `0.45.1`
 - Cypress => `9.2.0`
 
+### 0.0.3:
+- Swift Web Assembly toolchain => `5.5.0`
+- Carton => `0.12.1`
+- Binaryen => `105`
+- NodeJS => `v16.13.2`
+- Npm => `8.1.2`
+- Npx => `8.1.2`
+- Yarn => `1.22.17`
+- SwiftLint => `0.45.1`
+- Cypress => `9.2.0`
+- Brotli => `1.0.9`
+
 ## Thanks, the GoodNotes team.
