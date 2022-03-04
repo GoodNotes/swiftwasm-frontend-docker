@@ -47,3 +47,4 @@ jobs:
           NODE_VERSION=16.x
           OPEN_JDK_VERSION=11
           CYPRESS_VERSION=9.5.1
+          CHROME_VERSION=95.0.4638.69

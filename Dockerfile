@@ -36,6 +36,21 @@ RUN npm install --global yarn
 # Install cypress
 RUN npm install --global cypress@${CYPRESS_VERSION}
 
+ARG CHROME_VERSION
+# Install Chrome
+# "fake" dbus address to prevent errors
+# https://github.com/SeleniumHQ/docker-selenium/issues/87
+ENV DBUS_SESSION_BUS_ADDRESS=/dev/null
+
+USER root
+
+# Chrome dependencies
+RUN apt-get update && apt-get install -y wget fonts-liberation libappindicator3-1 xdg-utils
+# Chrome browser
+RUN wget -O /usr/src/google-chrome-stable_current_amd64.deb "http://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${CHROME_VERSION}-1_amd64.deb"
+RUN dpkg -i /usr/src/google-chrome-stable_current_amd64.deb
+RUN apt-get install -f -y
+
 # Intall swift lint from docker
 COPY --from=swiftLint /usr/bin/swiftlint /usr/bin/swiftlint
 COPY --from=swiftLint /usr/lib/libsourcekitdInProc.so /usr/lib
@@ -56,3 +71,4 @@ RUN swiftlint --version
 RUN cypress --version
 RUN wasm-opt --version
 RUN brotli --version
+RUN google-chrome --version
