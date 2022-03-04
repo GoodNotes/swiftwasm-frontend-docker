@@ -29,18 +29,7 @@ $ docker build \
 ## [TAGGED VERSIONS](https://github.com/GoodNotes/swiftwasm-frontend-docker/pkgs/container/swiftwasm-frontend-docker)
 Here you are a list of the tagged dockers with the specific tools version included.
 
-### 0.0.1:
-- Swift Web Assembly toolchain => `5.5.0`
-- Carton => `0.12.1`
-- Binaryen => `97`
-- NodeJS => `v16.13.2`
-- Npm => `8.1.2`
-- Npx => `8.1.2`
-- Yarn => `1.22.17`
-- SwiftLint => `0.45.1`
-- Cypress => `9.2.0`
-
-### 0.0.2:
+### 0.0.4:
 - Swift Web Assembly toolchain => `5.5.0`
 - Carton => `0.12.1`
 - Binaryen => `105`
@@ -49,7 +38,8 @@ Here you are a list of the tagged dockers with the specific tools version includ
 - Npx => `8.1.2`
 - Yarn => `1.22.17`
 - SwiftLint => `0.45.1`
-- Cypress => `9.2.0`
+- Cypress => `9.5.1`
+- Brotli => `1.0.9`
 
 ### 0.0.3:
 - Swift Web Assembly toolchain => `5.5.0`
@@ -62,5 +52,27 @@ Here you are a list of the tagged dockers with the specific tools version includ
 - SwiftLint => `0.45.1`
 - Cypress => `9.2.0`
 - Brotli => `1.0.9`
+
+### 0.0.2:
+- Swift Web Assembly toolchain => `5.5.0`
+- Carton => `0.12.1`
+- Binaryen => `105`
+- NodeJS => `v16.13.2`
+- Npm => `8.1.2`
+- Npx => `8.1.2`
+- Yarn => `1.22.17`
+- SwiftLint => `0.45.1`
+- Cypress => `9.2.0`
+
+### 0.0.1:
+- Swift Web Assembly toolchain => `5.5.0`
+- Carton => `0.12.1`
+- Binaryen => `97`
+- NodeJS => `v16.13.2`
+- Npm => `8.1.2`
+- Npx => `8.1.2`
+- Yarn => `1.22.17`
+- SwiftLint => `0.45.1`
+- Cypress => `9.2.0`
 
 ## Thanks, the GoodNotes team.

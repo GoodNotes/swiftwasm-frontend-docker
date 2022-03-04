@@ -46,4 +46,4 @@ jobs:
           CARTON_DOCKER_IMAGE=ghcr.io/swiftwasm/carton:0.12.1
           NODE_VERSION=16.x
           OPEN_JDK_VERSION=11
-          CYPRESS_VERSION=9.2.0
+          CYPRESS_VERSION=9.5.1
