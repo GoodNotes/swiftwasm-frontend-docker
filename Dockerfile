@@ -14,20 +14,50 @@ FROM $SWIFLINT_DOCKER_IMAGE as swiftLint
 
 
 ARG CARTON_DOCKER_IMAGE
-FROM $CARTON_DOCKER_IMAGE as swiftwasm-builder
+FROM $CARTON_DOCKER_IMAGE as carton-builder
+
+
+FROM ubuntu:20.04 as swiftwasm-builder
 
 ARG NODE_VERSION
 ARG OPEN_JDK_VERSION
 ARG CYPRESS_VERSION
+ARG SWIFT_TAG
+ARG SWIFT_PLATFORM_SUFFIX=ubuntu20.04_x86_64.tar.gz
+ARG SWIFT_BIN_URL="https://github.com/swiftwasm/swift/releases/download/$SWIFT_TAG/$SWIFT_TAG-$SWIFT_PLATFORM_SUFFIX"
+
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install node, OpenJDK-11 JRE (needed to run openapi-generator-cli)
 RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION} | bash -
+
+# Download and Install swift toolchain (we need snapshot artifact for getting release Foundation library)
+RUN curl -fsSL "$SWIFT_BIN_URL" -o swift.tar.gz \
+    && tar -xzf swift.tar.gz --directory / --strip-components=1 \
+    && chmod -R o+r /usr/lib/swift \
+    && rm -rf swift.tar.gz
+
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     openjdk-${OPEN_JDK_VERSION}-jre-headless nodejs \
-    libcurl4 \
-    libxml2 \
     libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb \
+    binutils \
+    git \
+    gnupg2 \
+    libc6-dev \
+    libcurl4 \
+    libedit2 \
+    libgcc-9-dev \
+    libpython2.7 \
+    libsqlite3-0 \
+    libstdc++-9-dev \
+    libxml2 \
+    libz3-dev \
     brotli \
+    pkg-config \
+    tzdata \
+    zlib1g-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Install yarn
@@ -53,9 +83,12 @@ RUN apt-get install -f -y
 
 # Intall swift lint from docker
 COPY --from=swiftLint /usr/bin/swiftlint /usr/bin/swiftlint
-COPY --from=swiftLint /usr/lib/libsourcekitdInProc.so /usr/lib
-COPY --from=swiftLint /usr/lib/swift/linux/libBlocksRuntime.so /usr/lib
-COPY --from=swiftLint /usr/lib/swift/linux/libdispatch.so /usr/lib
+COPY --from=swiftLint /usr/lib/libsourcekitdInProc.so /usr/lib/
+COPY --from=swiftLint /usr/lib/libBlocksRuntime.so /usr/lib/
+COPY --from=swiftLint /usr/lib/libdispatch.so /usr/lib/
+
+# Install latest carton tool
+COPY --from=carton-builder /usr/bin/carton /usr/bin/carton
 
 # Install latest binaryen tools (carton still uses some legacy version)
 COPY --from=binaryen binaryen-version_105/bin/* /usr/local/bin
