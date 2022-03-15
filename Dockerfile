@@ -90,6 +90,13 @@ COPY --from=swiftLint /usr/lib/libdispatch.so /usr/lib/
 # Install latest carton tool
 COPY --from=carton-builder /usr/bin/carton /usr/bin/carton
 
+ENV CARTON_ROOT=/root/.carton
+ENV CARTON_DEFAULT_TOOLCHAIN=$SWIFT_TAG
+
+RUN mkdir -p $CARTON_ROOT/sdk && \
+  mkdir -p $CARTON_ROOT/sdk/$CARTON_DEFAULT_TOOLCHAIN && \
+  ln -s /usr $CARTON_ROOT/sdk/$CARTON_DEFAULT_TOOLCHAIN/usr
+
 # Install latest binaryen tools (carton still uses some legacy version)
 COPY --from=binaryen binaryen-version_105/bin/* /usr/local/bin
 
