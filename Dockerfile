@@ -91,7 +91,8 @@ COPY --from=swiftLint /usr/lib/libdispatch.so /usr/lib/
 COPY --from=carton-builder /usr/bin/carton /usr/bin/carton
 
 ENV CARTON_ROOT=/root/.carton
-ENV CARTON_DEFAULT_TOOLCHAIN=$SWIFT_TAG
+# Carton is looking for toolchain with that specific name
+ENV CARTON_DEFAULT_TOOLCHAIN=wasm-5.5.0-RELEASE
 
 RUN mkdir -p $CARTON_ROOT/sdk && \
   mkdir -p $CARTON_ROOT/sdk/$CARTON_DEFAULT_TOOLCHAIN && \
