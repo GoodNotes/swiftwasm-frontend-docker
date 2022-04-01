@@ -20,8 +20,9 @@ The collection of tools included are:
 
 ```
 $ docker build \
-    --build-arg SWIFLINT_DOCKER_IMAGE=ghcr.io/norio-nomura/swiftlint:0.45.1_swift-5.5.0 \
-    --build-arg CARTON_DOCKER_IMAGE=ghcr.io/swiftwasm/carton:0.13.0 \
+    --build-arg SWIFLINT_DOCKER_IMAGE=ghcr.io/realm/swiftlint:0.46.5 \
+    --build-arg CARTON_DOCKER_IMAGE=ghcr.io/swiftwasm/carton:main \
+    --build-arg SWIFT_TAG=swift-wasm-5.5-SNAPSHOT-2022-03-10-a \
     --build-arg NODE_VERSION=16.x \
     --build-arg OPEN_JDK_VERSION=11 \
     --build-arg CYPRESS_VERSION=9.5.1 \
@@ -33,7 +34,7 @@ Here you are a list of the tagged dockers with the specific tools version includ
 
 ### 0.0.7:
 - Swift Web Assembly toolchain => `swift-wasm-5.5-SNAPSHOT-2022-03-10-a`
-- Carton => `0.13.0`
+- Carton => `main`
 - Binaryen => `105`
 - NodeJS => `v16.13.2`
 - Npm => `8.1.2`

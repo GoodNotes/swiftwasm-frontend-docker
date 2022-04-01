@@ -43,7 +43,7 @@ jobs:
         tags: ghcr.io/${{ env.REPOSITORY_LC }}:${{ env.DOCKER_TAG }} 
         build-args: |
           SWIFLINT_DOCKER_IMAGE=ghcr.io/realm/swiftlint:0.46.5
-          CARTON_DOCKER_IMAGE=ghcr.io/swiftwasm/carton:0.13.0
+          CARTON_DOCKER_IMAGE=ghcr.io/swiftwasm/carton:main
           SWIFT_TAG=swift-wasm-5.5-SNAPSHOT-2022-03-10-a
           NODE_VERSION=16.x
           OPEN_JDK_VERSION=11
