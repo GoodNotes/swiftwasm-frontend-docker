@@ -21,7 +21,7 @@ The collection of tools included are:
 ```
 $ docker build \
     --build-arg SWIFLINT_DOCKER_IMAGE=ghcr.io/realm/swiftlint:0.46.5 \
-    --build-arg CARTON_DOCKER_IMAGE=ghcr.io/swiftwasm/carton:main \
+    --build-arg CARTON_DOCKER_IMAGE=ghcr.io/swiftwasm/carton:0.13.0 \
     --build-arg SWIFT_TAG=swift-wasm-5.5-SNAPSHOT-2022-03-10-a \
     --build-arg NODE_VERSION=16.x \
     --build-arg OPEN_JDK_VERSION=11 \
