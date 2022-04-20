@@ -1,6 +1,7 @@
 name: CI-Docker
 
 on:
+  pull_request:
   push:
     branches:
       - main
@@ -25,6 +26,7 @@ jobs:
         echo "DOCKER_TAG=latest" >> $GITHUB_ENV
       
     - name: Login to Github registry
+      if: github.event_name != 'pull_request'
       uses: docker/login-action@v1 
       with:
         username: ${{ github.actor }}
@@ -39,11 +41,11 @@ jobs:
     
     - uses: docker/build-push-action@v2
       with:
-        push: true
+        push: ${{ github.event_name != 'pull_request' }}
         tags: ghcr.io/${{ env.REPOSITORY_LC }}:${{ env.DOCKER_TAG }} 
         build-args: |
           SWIFLINT_DOCKER_IMAGE=ghcr.io/realm/swiftlint:0.46.5
-          CARTON_DOCKER_IMAGE=ghcr.io/swiftwasm/carton:0.13.0
+          CARTON_DOCKER_IMAGE=ghcr.io/swiftwasm/carton:0.14.1
           SWIFT_TAG=swift-wasm-5.6.0-RELEASE
           NODE_VERSION=16.x
           OPEN_JDK_VERSION=11
