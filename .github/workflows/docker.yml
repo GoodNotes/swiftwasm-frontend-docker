@@ -49,5 +49,6 @@ jobs:
           SWIFT_TAG=swift-wasm-5.6.0-RELEASE
           NODE_VERSION=16.x
           OPEN_JDK_VERSION=11
-          CYPRESS_VERSION=9.5.1
-          CHROME_VERSION=95.0.4638.69
+          CYPRESS_VERSION=8.5.0
+          CHROME_VERSION=101.0.4951.54
+          FIREFOX_VERSION=99.0.1

@@ -81,6 +81,14 @@ RUN wget -O /usr/src/google-chrome-stable_current_amd64.deb "http://dl.google.co
 RUN dpkg -i /usr/src/google-chrome-stable_current_amd64.deb
 RUN apt-get install -f -y
 
+# Install firefox
+ARG FIREFOX_VERSION
+RUN wget --no-verbose -O /tmp/firefox.tar.bz2 \
+  https://download-installer.cdn.mozilla.net/pub/firefox/releases/$FIREFOX_VERSION/linux-x86_64/en-US/firefox-$FIREFOX_VERSION.tar.bz2 \
+  && tar -C /opt -xjf /tmp/firefox.tar.bz2 \
+  && rm /tmp/firefox.tar.bz2 \
+  && ln -fs /opt/firefox/firefox /usr/bin/firefox
+
 # Intall swift lint from docker
 COPY --from=swiftLint /usr/bin/swiftlint /usr/bin/swiftlint
 COPY --from=swiftLint /usr/lib/libsourcekitdInProc.so /usr/lib/
