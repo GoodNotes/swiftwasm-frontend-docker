@@ -25,12 +25,27 @@ $ docker build \
     --build-arg SWIFT_TAG=swift-wasm-5.6.0-RELEASE \
     --build-arg NODE_VERSION=16.x \
     --build-arg OPEN_JDK_VERSION=11 \
-    --build-arg CYPRESS_VERSION=9.5.1 \
-    --build-arg CHROME_VERSION=95.0.4638.69 - < Dockerfile
+    --build-arg CYPRESS_VERSION=8.5.0 \
+    --build-arg FIREFOX_VERSION=99.0.1 \
+    --build-arg CHROME_VERSION=101.0.4951.54 - < Dockerfile
 ```
 
 ## [TAGGED VERSIONS](https://github.com/GoodNotes/swiftwasm-frontend-docker/pkgs/container/swiftwasm-frontend-docker)
 Here you are a list of the tagged dockers with the specific tools version included.
+
+### 0.0.10:
+- Swift Web Assembly toolchain => `swift-wasm-5.6.0-RELEASE`
+- Carton => `0.14.1`
+- Binaryen => `105`
+- NodeJS => `v16.13.2`
+- Npm => `8.1.2`
+- Npx => `8.1.2`
+- Yarn => `1.22.17`
+- SwiftLint => `0.46.5`
+- Cypress => `8.5.0`
+- Brotli => `1.0.9`
+- Chrome => `101.0.4951.54`
+- Firefox => `99.0.1`
 
 ### 0.0.9:
 - Swift Web Assembly toolchain => `swift-wasm-5.6.0-RELEASE`
