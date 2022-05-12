@@ -13,6 +13,7 @@ The collection of tools included are:
 - NodeJS
 - Yarn
 - SwiftLint
+- Swift Format
 - Cypress
 - Google Chrome
 
