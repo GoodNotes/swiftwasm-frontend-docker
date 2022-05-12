@@ -114,6 +114,8 @@ RUN mkdir -p $CARTON_ROOT/sdk && \
 COPY --from=binaryen binaryen-version_105/bin/* /usr/local/bin
 
 # Install swift format 
+COPY --from=swift-format-builder /lib/x86_64-linux-gnu/libtinfo.so.* /usr/lib/
+COPY --from=swift-format-builder /usr/lib/swift/linux/*.so /usr/lib/
 COPY --from=swift-format-builder swift-format/.build/release/swift-format /usr/local/bin/swift-format
 
 # Print Installed Versions
