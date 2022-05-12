@@ -1,5 +1,18 @@
 ARG SWIFLINT_DOCKER_IMAGE
 ARG CARTON_DOCKER_IMAGE
+ARG SWIFT_DOCKER_IMAGE
+
+FROM $SWIFLINT_DOCKER_IMAGE as swiftLint
+
+FROM $CARTON_DOCKER_IMAGE as carton-builder
+
+FROM $SWIFT_DOCKER_IMAGE as swift-format-builder
+
+ARG SWIFT_FORMAT_TAG 
+RUN git clone https://github.com/apple/swift-format.git && \
+    cd swift-format && \
+    git checkout "tags/$SWIFT_FORMAT_TAG" && \
+    swift build -c release
 
 FROM ubuntu:latest as binaryen
 
@@ -7,23 +20,14 @@ RUN apt-get update && apt-get install -y curl
 RUN curl -L -v -o binaryen.tar.gz https://github.com/WebAssembly/binaryen/releases/download/version_105/binaryen-version_105-x86_64-linux.tar.gz
 RUN tar xzvf binaryen.tar.gz
 
-ARG SWIFLINT_DOCKER_IMAGE
-ARG CARTON_DOCKER_IMAGE
-
-FROM $SWIFLINT_DOCKER_IMAGE as swiftLint
-
-
-ARG CARTON_DOCKER_IMAGE
-FROM $CARTON_DOCKER_IMAGE as carton-builder
-
-
 FROM ubuntu:20.04 as swiftwasm-builder
 
+ARG SWIFT_TAG
 ARG NODE_VERSION
+ARG SWIFT_PLATFORM_SUFFIX=ubuntu20.04_x86_64.tar.gz
 ARG OPEN_JDK_VERSION
 ARG CYPRESS_VERSION
-ARG SWIFT_TAG
-ARG SWIFT_PLATFORM_SUFFIX=ubuntu20.04_x86_64.tar.gz
+
 ARG SWIFT_BIN_URL="https://github.com/swiftwasm/swift/releases/download/$SWIFT_TAG/$SWIFT_TAG-$SWIFT_PLATFORM_SUFFIX"
 
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
@@ -109,6 +113,9 @@ RUN mkdir -p $CARTON_ROOT/sdk && \
 # Install latest binaryen tools (carton still uses some legacy version)
 COPY --from=binaryen binaryen-version_105/bin/* /usr/local/bin
 
+# Install swift format 
+COPY --from=swift-format-builder swift-format/.build/release/swift-format /usr/local/bin/swift-format
+
 # Print Installed Versions
 RUN swift --version
 RUN carton --version
@@ -117,6 +124,7 @@ RUN npm --version
 RUN npx --version
 RUN yarn --version
 RUN swiftlint --version
+RUN swift-format --version
 RUN cypress --version
 RUN wasm-opt --version
 RUN brotli --version
