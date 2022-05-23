@@ -20,6 +20,12 @@ RUN apt-get update && apt-get install -y curl
 RUN curl -L -v -o binaryen.tar.gz https://github.com/WebAssembly/binaryen/releases/download/version_105/binaryen-version_105-x86_64-linux.tar.gz
 RUN tar xzvf binaryen.tar.gz
 
+FROM ubuntu:20.04 as symbolicator-builder
+
+ARG SYMBOLICATOR_VERSION
+RUN apt-get update && apt-get install -y curl
+RUN curl -L -v -o wasm-split https://github.com/getsentry/symbolicator/releases/download/$SYMBOLICATOR_VERSION/wasm-split-Linux-x86_64 && chmod +x wasm-split
+
 FROM ubuntu:20.04 as swiftwasm-builder
 
 ARG SWIFT_TAG
@@ -118,6 +124,8 @@ COPY --from=swift-format-builder /lib/x86_64-linux-gnu/libtinfo.so.* /usr/lib/
 COPY --from=swift-format-builder /usr/lib/swift/linux/*.so /usr/lib/
 COPY --from=swift-format-builder swift-format/.build/release/swift-format /usr/local/bin/swift-format
 
+COPY --from=symbolicator-builder wasm-split /usr/local/bin
+
 # Print Installed Versions
 RUN swift --version
 RUN carton --version
@@ -131,3 +139,4 @@ RUN cypress --version
 RUN wasm-opt --version
 RUN brotli --version
 RUN google-chrome --version
+RUN wasm-split --version
