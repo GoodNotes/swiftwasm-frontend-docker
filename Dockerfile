@@ -77,6 +77,7 @@ RUN npm install --global yarn
 RUN npm install --global cypress@${CYPRESS_VERSION}
 
 ARG CHROME_VERSION
+ARG CHROME_DRIVER_VERSION
 # Install Chrome
 # "fake" dbus address to prevent errors
 # https://github.com/SeleniumHQ/docker-selenium/issues/87
@@ -89,6 +90,10 @@ RUN apt-get update && apt-get install -y wget fonts-liberation libappindicator3-
 # Chrome browser
 RUN wget -O /usr/src/google-chrome-stable_current_amd64.deb "http://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${CHROME_VERSION}-1_amd64.deb"
 RUN dpkg -i /usr/src/google-chrome-stable_current_amd64.deb
+RUN wget "https://chromedriver.storage.googleapis.com/${CHROME_DRIVER_VERSION}/chromedriver_linux64.zip" \
+  && unzip chromedriver_linux64.zip \
+  && mv chromedriver /usr/bin/chromedriver \
+  && rm chromedriver_linux64.zip
 RUN apt-get install -f -y
 
 # Install firefox

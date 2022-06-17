@@ -31,6 +31,7 @@ $ docker build \
     --build-arg CYPRESS_VERSION=8.5.0 \
     --build-arg FIREFOX_VERSION=99.0.1 \
     --build-arg CHROME_VERSION=101.0.4951.54 \
+    --build-arg CHROME_DRIVER_VERSION=101.0.4951.41 \
     --build-arg SYMBOLICATOR_VERSION=0.5.0 - < Dockerfile
 ```
 
