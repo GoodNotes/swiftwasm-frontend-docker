@@ -47,7 +47,7 @@ jobs:
         tags: ghcr.io/${{ env.REPOSITORY_LC }}:${{ env.DOCKER_TAG }} 
         build-args: |
           SWIFLINT_DOCKER_IMAGE=ghcr.io/realm/swiftlint:0.46.5
-          CARTON_DOCKER_IMAGE=ghcr.io/swiftwasm/carton:0.15.3
+          CARTON_DOCKER_IMAGE=ghcr.io/swiftwasm/carton:0.16.0
           SWIFT_DOCKER_IMAGE=swift:5.6
           SWIFT_TAG=swift-wasm-5.6.0-RELEASE
           SWIFT_FORMAT_TAG=0.50600.0
@@ -55,5 +55,6 @@ jobs:
           OPEN_JDK_VERSION=11
           CYPRESS_VERSION=8.5.0
           CHROME_VERSION=101.0.4951.54
+          CHROME_DRIVER_VERSION=101.0.4951.41
           FIREFOX_VERSION=99.0.1
           SYMBOLICATOR_VERSION=0.5.0
