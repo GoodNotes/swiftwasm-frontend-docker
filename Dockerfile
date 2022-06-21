@@ -5,6 +5,7 @@ ARG SWIFT_DOCKER_IMAGE
 FROM $SWIFLINT_DOCKER_IMAGE as swiftLint
 
 FROM $CARTON_DOCKER_IMAGE as carton-builder
+RUN echo $CARTON_DEFAULT_TOOLCHAIN > /tmp/carton_default_toolchain.txt
 
 FROM $SWIFT_DOCKER_IMAGE as swift-format-builder
 
@@ -112,12 +113,13 @@ COPY --from=swiftLint /usr/lib/libdispatch.so /usr/lib/
 
 # Install latest carton tool
 COPY --from=carton-builder /usr/bin/carton /usr/bin/carton
+# Carton is looking for toolchain with that specific name
+COPY --from=carton-builder /tmp/carton_default_toolchain.txt /tmp/carton_default_toolchain.txt
 
 ENV CARTON_ROOT=/root/.carton
-# Carton is looking for toolchain with that specific name
-ENV CARTON_DEFAULT_TOOLCHAIN=wasm-5.5.0-RELEASE
 
-RUN mkdir -p $CARTON_ROOT/sdk && \
+RUN CARTON_DEFAULT_TOOLCHAIN="$(cat /tmp/carton_default_toolchain.txt)" && \
+  mkdir -p $CARTON_ROOT/sdk && \
   mkdir -p $CARTON_ROOT/sdk/$CARTON_DEFAULT_TOOLCHAIN && \
   ln -s /usr $CARTON_ROOT/sdk/$CARTON_DEFAULT_TOOLCHAIN/usr
 
