@@ -72,7 +72,6 @@ Here you are a list of the tagged dockers with the specific tools version includ
 - Firefox => `99.0.1`
 - Sentry Symbolicator => `0.5.0`
 
-
 ### 0.0.17:
 - Swift Web Assembly toolchain => `swift-wasm-5.6-SNAPSHOT-2022-06-30-a`
 - Carton => `0.16.1`
