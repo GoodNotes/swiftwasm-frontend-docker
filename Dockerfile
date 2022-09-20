@@ -49,6 +49,7 @@ RUN curl -fsSL "$SWIFT_BIN_URL" -o swift.tar.gz \
     && chmod -R o+r /usr/lib/swift \
     && rm -rf swift.tar.gz
 
+# Install all dependencies also Traditional Chinese, Simplified Chinese, Japanese and Korean fonts (noto-cjk)
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     openjdk-${OPEN_JDK_VERSION}-jre-headless nodejs \
     libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb \
@@ -68,6 +69,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     pkg-config \
     tzdata \
     zlib1g-dev \
+    fonts-noto-cjk \
     && rm -rf /var/lib/apt/lists/*
 
 # Install yarn
