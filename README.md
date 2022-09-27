@@ -24,7 +24,7 @@ $ docker build \
     --build-arg SWIFLINT_DOCKER_IMAGE=ghcr.io/realm/swiftlint:0.46.5 \
     --build-arg CARTON_DOCKER_IMAGE=ghcr.io/swiftwasm/carton:0.16.1 \
     --build-arg SWIFT_DOCKER_IMAGE=swift:5.6 \
-    --build-arg SWIFT_TAG=swift-wasm-5.7-SNAPSHOT-2022-09-18-a \
+    --build-arg SWIFT_TAG=swift-wasm-5.7.1-RELEASE \
     --build-arg SWIFT_FORMAT_TAG=0.50600.0 \
     --build-arg NODE_VERSION=16.x \
     --build-arg OPEN_JDK_VERSION=11 \
@@ -39,7 +39,7 @@ $ docker build \
 Here you are a list of the tagged dockers with the specific tools version included.
 
 ### 0.0.20:
-- Swift Web Assembly toolchain => `swift-wasm-5.7-SNAPSHOT-2022-09-18-a`
+- Swift Web Assembly toolchain => `swift-wasm-5.7.1-RELEASE`
 - Carton => `0.16.1`
 - Binaryen => `105`
 - NodeJS => `v16.13.2`
