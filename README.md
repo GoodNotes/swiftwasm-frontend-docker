@@ -38,7 +38,7 @@ $ docker build \
 ## [TAGGED VERSIONS](https://github.com/GoodNotes/swiftwasm-frontend-docker/pkgs/container/swiftwasm-frontend-docker)
 Here you are a list of the tagged dockers with the specific tools version included.
 
-### 0.0.20:
+### 0.0.21:
 - Swift Web Assembly toolchain => `swift-wasm-5.7.1-RELEASE`
 - Carton => `0.16.1`
 - Binaryen => `105`
