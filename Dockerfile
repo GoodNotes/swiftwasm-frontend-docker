@@ -43,11 +43,16 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
 # Install node, OpenJDK-11 JRE (needed to run openapi-generator-cli)
 RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION} | bash -
 
+ENV CARTON_ROOT=/root/.carton
+
 # Download and Install swift toolchain (we need snapshot artifact for getting release Foundation library)
-RUN curl -fsSL "$SWIFT_BIN_URL" -o swift.tar.gz \
-    && tar -xzf swift.tar.gz --directory / --strip-components=1 \
-    && chmod -R o+r /usr/lib/swift \
-    && rm -rf swift.tar.gz
+RUN CARTON_DEFAULT_TOOLCHAIN_PATH="$CARTON_ROOT/sdk/${SWIFT_TAG#swift-}" \
+    && curl -fsSL "$SWIFT_BIN_URL" -o swift.tar.gz \
+    && mkdir -p "$CARTON_DEFAULT_TOOLCHAIN_PATH" \
+    && tar -xzf swift.tar.gz --directory "$CARTON_DEFAULT_TOOLCHAIN_PATH" --strip-components=1 \
+    && ln -s "$CARTON_DEFAULT_TOOLCHAIN_PATH" /opt/swiftwasm
+
+ENV PATH="/opt/swiftwasm/usr/bin:$PATH"
 
 # Install all dependencies also Traditional Chinese, Simplified Chinese, Japanese and Korean fonts (noto-cjk)
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
@@ -117,20 +122,12 @@ COPY --from=swiftLint /usr/lib/libdispatch.so /usr/lib/
 # Install latest carton tool
 COPY --from=carton-builder /usr/bin/carton /usr/bin/carton
 
-ENV CARTON_ROOT=/root/.carton
-
-# Strip swift- prefix from tag name, and create symlink under carton sdk
-RUN CARTON_DEFAULT_TOOLCHAIN="${SWIFT_TAG#swift-}" && \
-  mkdir -p $CARTON_ROOT/sdk && \
-  mkdir -p $CARTON_ROOT/sdk/$CARTON_DEFAULT_TOOLCHAIN && \
-  ln -s /usr $CARTON_ROOT/sdk/$CARTON_DEFAULT_TOOLCHAIN/usr
-
 # Install latest binaryen tools (carton still uses some legacy version)
 COPY --from=binaryen binaryen-version_105/bin/* /usr/local/bin
 
 # Install swift format 
 COPY --from=swift-format-builder /lib/x86_64-linux-gnu/libtinfo.so.* /usr/lib/
-COPY --from=swift-format-builder /usr/lib/swift/linux/*.so /usr/lib/
+COPY --from=swift-format-builder /usr/lib/swift/linux/*.so* /usr/lib/
 COPY --from=swift-format-builder swift-format/.build/release/swift-format /usr/local/bin/swift-format
 
 COPY --from=symbolicator-builder wasm-split /usr/local/bin
