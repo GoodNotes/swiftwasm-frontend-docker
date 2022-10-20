@@ -22,7 +22,7 @@ The collection of tools included are:
 ```
 $ docker build \
     --build-arg SWIFLINT_DOCKER_IMAGE=ghcr.io/realm/swiftlint:0.46.5 \
-    --build-arg CARTON_DOCKER_IMAGE=ghcr.io/swiftwasm/carton:0.17.0 \
+    --build-arg CARTON_TAG=0.17.0 \
     --build-arg SWIFT_DOCKER_IMAGE=swift:5.6 \
     --build-arg SWIFT_TAG=swift-wasm-5.7.1-RELEASE \
     --build-arg SWIFT_FORMAT_TAG=0.50600.0 \

@@ -1,10 +1,16 @@
 ARG SWIFLINT_DOCKER_IMAGE
-ARG CARTON_DOCKER_IMAGE
 ARG SWIFT_DOCKER_IMAGE
 
 FROM $SWIFLINT_DOCKER_IMAGE as swiftLint
 
-FROM $CARTON_DOCKER_IMAGE as carton-builder
+FROM $SWIFT_DOCKER_IMAGE as carton-builder
+ARG CARTON_TAG
+RUN apt-get update && apt-get install -y libsqlite3-dev
+RUN git clone https://github.com/swiftwasm/carton.git && \
+    cd carton && \
+    git checkout "tags/$CARTON_TAG" && \
+    swift build -c release && \
+    mv .build/release/carton /usr/bin
 
 FROM $SWIFT_DOCKER_IMAGE as swift-format-builder
 
