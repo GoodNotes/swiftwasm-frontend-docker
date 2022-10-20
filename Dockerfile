@@ -26,7 +26,7 @@ ARG SYMBOLICATOR_VERSION
 RUN apt-get update && apt-get install -y curl
 RUN curl -L -v -o wasm-split https://github.com/getsentry/symbolicator/releases/download/$SYMBOLICATOR_VERSION/wasm-split-Linux-x86_64 && chmod +x wasm-split
 
-FROM ubuntu:20.04 as swiftwasm-builder
+FROM $SWIFT_DOCKER_IMAGE-slim as swiftwasm-builder
 
 ARG SWIFT_TAG
 ARG NODE_VERSION
@@ -116,8 +116,6 @@ RUN wget --no-verbose -O /tmp/firefox.tar.bz2 \
 # Intall swift lint from docker
 COPY --from=swiftLint /usr/bin/swiftlint /usr/bin/swiftlint
 COPY --from=swiftLint /usr/lib/libsourcekitdInProc.so /usr/lib/
-COPY --from=swiftLint /usr/lib/libBlocksRuntime.so /usr/lib/
-COPY --from=swiftLint /usr/lib/libdispatch.so /usr/lib/
 
 # Install latest carton tool
 COPY --from=carton-builder /usr/bin/carton /usr/bin/carton
@@ -126,8 +124,6 @@ COPY --from=carton-builder /usr/bin/carton /usr/bin/carton
 COPY --from=binaryen binaryen-version_105/bin/* /usr/local/bin
 
 # Install swift format 
-COPY --from=swift-format-builder /lib/x86_64-linux-gnu/libtinfo.so.* /usr/lib/
-COPY --from=swift-format-builder /usr/lib/swift/linux/*.so* /usr/lib/
 COPY --from=swift-format-builder swift-format/.build/release/swift-format /usr/local/bin/swift-format
 
 COPY --from=symbolicator-builder wasm-split /usr/local/bin
