@@ -14,7 +14,7 @@ RUN git clone https://github.com/apple/swift-format.git && \
     git checkout "tags/$SWIFT_FORMAT_TAG" && \
     swift build -c release
 
-FROM ubuntu:latest as binaryen
+FROM ubuntu:20.04 as binaryen
 
 RUN apt-get update && apt-get install -y curl
 RUN curl -L -v -o binaryen.tar.gz https://github.com/WebAssembly/binaryen/releases/download/version_105/binaryen-version_105-x86_64-linux.tar.gz
