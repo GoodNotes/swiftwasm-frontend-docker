@@ -15,9 +15,15 @@ RUN git clone https://github.com/swiftwasm/carton.git && \
 FROM $SWIFT_DOCKER_IMAGE as swift-format-builder
 
 ARG SWIFT_FORMAT_TAG 
+
+# FIXME(katei): The sed hack is required to pin the swift-syntax version to `0.50700.0`.
+# Without this hack, SwiftPM uses swift-syntax `0.50700.1`, which is incompatible with 5.7.0
+# Docker image. Remove the hack after Apple folks will release an image compatible with swift-syntax
+# `0.50700.1` (probably `swift:5.7.1`?)
 RUN git clone https://github.com/apple/swift-format.git && \
     cd swift-format && \
     git checkout "tags/$SWIFT_FORMAT_TAG" && \
+    sed -i -e 's/.upToNextMinor(from: "0.50700.0")/exact: "0.50700.0"/' Package.swift && \
     swift build -c release
 
 FROM ubuntu:20.04 as binaryen
