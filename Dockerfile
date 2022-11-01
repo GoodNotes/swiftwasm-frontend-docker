@@ -1,20 +1,32 @@
 ARG SWIFLINT_DOCKER_IMAGE
-ARG CARTON_DOCKER_IMAGE
 ARG SWIFT_DOCKER_IMAGE
 
 FROM $SWIFLINT_DOCKER_IMAGE as swiftLint
 
-FROM $CARTON_DOCKER_IMAGE as carton-builder
+FROM $SWIFT_DOCKER_IMAGE as carton-builder
+ARG CARTON_TAG
+RUN apt-get update && apt-get install -y libsqlite3-dev
+RUN git clone https://github.com/swiftwasm/carton.git && \
+    cd carton && \
+    git checkout "tags/$CARTON_TAG" && \
+    swift build -c release && \
+    mv .build/release/carton /usr/bin
 
 FROM $SWIFT_DOCKER_IMAGE as swift-format-builder
 
 ARG SWIFT_FORMAT_TAG 
+
+# FIXME(katei): The sed hack is required to pin the swift-syntax version to `0.50700.0`.
+# Without this hack, SwiftPM uses swift-syntax `0.50700.1`, which is incompatible with 5.7.0
+# Docker image. Remove the hack after Apple folks will release an image compatible with swift-syntax
+# `0.50700.1` (probably `swift:5.7.1`?)
 RUN git clone https://github.com/apple/swift-format.git && \
     cd swift-format && \
     git checkout "tags/$SWIFT_FORMAT_TAG" && \
+    sed -i -e 's/.upToNextMinor(from: "0.50700.0")/exact: "0.50700.0"/' Package.swift && \
     swift build -c release
 
-FROM ubuntu:latest as binaryen
+FROM ubuntu:20.04 as binaryen
 
 RUN apt-get update && apt-get install -y curl
 RUN curl -L -v -o binaryen.tar.gz https://github.com/WebAssembly/binaryen/releases/download/version_105/binaryen-version_105-x86_64-linux.tar.gz
@@ -26,7 +38,7 @@ ARG SYMBOLICATOR_VERSION
 RUN apt-get update && apt-get install -y curl
 RUN curl -L -v -o wasm-split https://github.com/getsentry/symbolicator/releases/download/$SYMBOLICATOR_VERSION/wasm-split-Linux-x86_64 && chmod +x wasm-split
 
-FROM ubuntu:20.04 as swiftwasm-builder
+FROM $SWIFT_DOCKER_IMAGE-slim as swiftwasm-builder
 
 ARG SWIFT_TAG
 ARG NODE_VERSION
@@ -116,8 +128,6 @@ RUN wget --no-verbose -O /tmp/firefox.tar.bz2 \
 # Intall swift lint from docker
 COPY --from=swiftLint /usr/bin/swiftlint /usr/bin/swiftlint
 COPY --from=swiftLint /usr/lib/libsourcekitdInProc.so /usr/lib/
-COPY --from=swiftLint /usr/lib/libBlocksRuntime.so /usr/lib/
-COPY --from=swiftLint /usr/lib/libdispatch.so /usr/lib/
 
 # Install latest carton tool
 COPY --from=carton-builder /usr/bin/carton /usr/bin/carton
@@ -126,8 +136,6 @@ COPY --from=carton-builder /usr/bin/carton /usr/bin/carton
 COPY --from=binaryen binaryen-version_105/bin/* /usr/local/bin
 
 # Install swift format 
-COPY --from=swift-format-builder /lib/x86_64-linux-gnu/libtinfo.so.* /usr/lib/
-COPY --from=swift-format-builder /usr/lib/swift/linux/*.so* /usr/lib/
 COPY --from=swift-format-builder swift-format/.build/release/swift-format /usr/local/bin/swift-format
 
 COPY --from=symbolicator-builder wasm-split /usr/local/bin
