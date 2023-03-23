@@ -33,6 +33,7 @@ RUN curl -L -v -o binaryen.tar.gz https://github.com/WebAssembly/binaryen/releas
 RUN tar xzvf binaryen.tar.gz
 
 # Install cargo + wasm-snip
+RUN apt-get install -y build-essential
 RUN curl https://sh.rustup.rs -sSf > rustup.sh
 RUN chmod 755 rustup.sh
 RUN ./rustup.sh -y
