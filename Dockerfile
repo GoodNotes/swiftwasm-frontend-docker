@@ -140,6 +140,10 @@ COPY --from=swift-format-builder swift-format/.build/release/swift-format /usr/l
 
 COPY --from=symbolicator-builder wasm-split /usr/local/bin
 
+# Install cargo + wasm-snip
+RUN curl https://sh.rustup.rs -sSf | sh
+RUN /root/.cargo/bin/cargo install wasm-snip
+
 # Print Installed Versions
 RUN swift --version
 RUN carton --version
@@ -154,3 +158,4 @@ RUN wasm-opt --version
 RUN brotli --version
 RUN google-chrome --version
 RUN wasm-split --version
+RUN wasm-snip --version
