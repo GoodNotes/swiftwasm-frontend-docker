@@ -38,7 +38,7 @@ RUN curl https://sh.rustup.rs -sSf > rustup.sh
 RUN chmod 755 rustup.sh
 RUN ./rustup.sh -y
 RUN $HOME/.cargo/bin/cargo install wasm-snip
-COPY $HOME/.cargo/bin/ $HOME/.cargo/bin/
+COPY ./ ./
 ENV PATH="$PATH:/$HOME/.cargo/bin/"
 
 FROM ubuntu:20.04 as symbolicator-builder
