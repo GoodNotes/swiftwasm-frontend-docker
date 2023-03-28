@@ -24,7 +24,7 @@ $ docker build \
     --build-arg SWIFLINT_DOCKER_IMAGE=ghcr.io/realm/swiftlint:0.46.5 \
     --build-arg CARTON_TAG=0.17.0 \
     --build-arg SWIFT_DOCKER_IMAGE=swift:5.7.0-focal \
-    --build-arg SWIFT_TAG=swift-wasm-5.7.1-RELEASE \
+    --build-arg SWIFT_TAG=swift-wasm-5.7.3-RELEASE \
     --build-arg SWIFT_FORMAT_TAG=0.50700.0 \
     --build-arg NODE_VERSION=16.x \
     --build-arg OPEN_JDK_VERSION=11 \
@@ -37,6 +37,23 @@ $ docker build \
 
 ## [TAGGED VERSIONS](https://github.com/GoodNotes/swiftwasm-frontend-docker/pkgs/container/swiftwasm-frontend-docker)
 Here you are a list of the tagged dockers with the specific tools version included.
+
+### 0.0.26:
+- Swift Web Assembly toolchain => `swift-wasm-5.7.3-RELEASE`
+- Carton => `0.17.0`
+- Binaryen => `105`
+- NodeJS => `v16.13.2`
+- Npm => `8.1.2`
+- Npx => `8.1.2`
+- Yarn => `1.22.17`
+- SwiftLint => `0.46.5`
+- SwiftFormat => `0.50700.0`
+- Cypress => `12.3.0`
+- Brotli => `1.0.9`
+- Chrome => `101.0.4951.54`
+- ChromeDriver => `101.0.4951.41`
+- Firefox => `99.0.1`
+- Sentry Symbolicator => `0.5.0`
 
 ### 0.0.25:
 - Swift Web Assembly toolchain => `swift-wasm-5.7.1-RELEASE`
