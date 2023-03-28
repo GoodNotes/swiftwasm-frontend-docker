@@ -24,7 +24,7 @@ $ docker build \
     --build-arg SWIFLINT_DOCKER_IMAGE=ghcr.io/realm/swiftlint:0.46.5 \
     --build-arg CARTON_TAG=0.17.0 \
     --build-arg SWIFT_DOCKER_IMAGE=swift:5.7.0-focal \
-    --build-arg SWIFT_TAG=swift-wasm-5.7.1-RELEASE \
+    --build-arg SWIFT_TAG=swift-wasm-5.7.3-RELEASE \
     --build-arg SWIFT_FORMAT_TAG=0.50700.0 \
     --build-arg NODE_VERSION=16.x \
     --build-arg OPEN_JDK_VERSION=11 \
