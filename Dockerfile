@@ -28,13 +28,13 @@ RUN git clone https://github.com/apple/swift-format.git && \
     sed -i -e 's/.upToNextMinor(from: "0.50700.0")/exact: "0.50700.0"/' Package.swift && \
     swift build -c release
 
-FROM ubuntu:20.04 as binaryen
+FROM ubuntu:22.04 as binaryen
 
 RUN apt-get update && apt-get install -y curl
 RUN curl -L -v -o binaryen.tar.gz https://github.com/WebAssembly/binaryen/releases/download/version_105/binaryen-version_105-x86_64-linux.tar.gz
 RUN tar xzvf binaryen.tar.gz
 
-FROM ubuntu:20.04 as symbolicator-builder
+FROM ubuntu:22.04 as symbolicator-builder
 
 ARG SYMBOLICATOR_VERSION
 RUN apt-get update && apt-get install -y curl
@@ -44,7 +44,7 @@ FROM $SWIFT_DOCKER_IMAGE-slim as swiftwasm-builder
 
 ARG SWIFT_TAG
 ARG NODE_VERSION
-ARG SWIFT_PLATFORM_SUFFIX=ubuntu20.04_x86_64.tar.gz
+ARG SWIFT_PLATFORM_SUFFIX=ubuntu22.04_x86_64.tar.gz
 ARG OPEN_JDK_VERSION
 ARG CYPRESS_VERSION
 
@@ -92,6 +92,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     fonts-noto-color-emoji \
     fonts-indic \
     fonts-thai-tlwg-ttf \
+    unzip \
     && rm -rf /var/lib/apt/lists/*
 
 # Install yarn
