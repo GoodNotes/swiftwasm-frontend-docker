@@ -55,7 +55,7 @@ jobs:
           mkdir -p $wasm_tools_dir
           mv carton/.build/release/carton $wasm_tools_dir/carton
           mv wasm-${{ inputs.swift-version }}-RELEASE $wasm_tools_dir/
-          tar cf $wasm_tools_dir.tar.gz $wasm_tools_dir
+          tar czf $wasm_tools_dir.tar.gz $wasm_tools_dir
 
       - name: Compute release version number
         id: compute-version
