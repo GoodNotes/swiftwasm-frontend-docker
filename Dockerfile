@@ -32,15 +32,6 @@ RUN apt-get update && apt-get install -y curl
 RUN curl -L -v -o binaryen.tar.gz https://github.com/WebAssembly/binaryen/releases/download/version_105/binaryen-version_105-x86_64-linux.tar.gz
 RUN tar xzvf binaryen.tar.gz
 
-# Install cargo + wasm-snip
-RUN apt-get install -y build-essential
-RUN curl https://sh.rustup.rs -sSf > rustup.sh
-RUN chmod 755 rustup.sh
-RUN ./rustup.sh -y
-RUN $HOME/.cargo/bin/cargo install wasm-snip
-COPY ./ ./
-ENV PATH="$PATH:/$HOME/.cargo/bin/"
-
 FROM ubuntu:20.04 as symbolicator-builder
 
 ARG SYMBOLICATOR_VERSION
