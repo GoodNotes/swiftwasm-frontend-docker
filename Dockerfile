@@ -4,11 +4,13 @@ ARG SWIFT_DOCKER_IMAGE
 FROM $SWIFLINT_DOCKER_IMAGE as swiftLint
 
 FROM $SWIFT_DOCKER_IMAGE as carton-builder
+ARG SWIFT_TAG
 ARG CARTON_TAG
 RUN apt-get update && apt-get install -y libsqlite3-dev
 RUN git clone https://github.com/swiftwasm/carton.git && \
     cd carton && \
     git checkout "tags/$CARTON_TAG" && \
+    export CARTON_DEFAULT_TOOLCHAIN=$SWIFT_TAG && \
     swift build -c release && \
     mv .build/release/carton /usr/bin
 
@@ -46,7 +48,7 @@ ARG SWIFT_PLATFORM_SUFFIX=ubuntu20.04_x86_64.tar.gz
 ARG OPEN_JDK_VERSION
 ARG CYPRESS_VERSION
 
-ARG SWIFT_BIN_URL="https://github.com/swiftwasm/swift/releases/download/$SWIFT_TAG/$SWIFT_TAG-$SWIFT_PLATFORM_SUFFIX"
+ARG SWIFT_BIN_URL="https://github.com/swiftwasm/swift/releases/download/swift-$SWIFT_TAG/swift-$SWIFT_TAG-$SWIFT_PLATFORM_SUFFIX"
 
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     curl \
@@ -58,7 +60,7 @@ RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION} | bash -
 ENV CARTON_ROOT=/root/.carton
 
 # Download and Install swift toolchain (we need snapshot artifact for getting release Foundation library)
-RUN CARTON_DEFAULT_TOOLCHAIN_PATH="$CARTON_ROOT/sdk/${SWIFT_TAG#swift-}" \
+RUN CARTON_DEFAULT_TOOLCHAIN_PATH="$CARTON_ROOT/sdk/${SWIFT_TAG}" \
     && curl -fsSL "$SWIFT_BIN_URL" -o swift.tar.gz \
     && mkdir -p "$CARTON_DEFAULT_TOOLCHAIN_PATH" \
     && tar -xzf swift.tar.gz --directory "$CARTON_DEFAULT_TOOLCHAIN_PATH" --strip-components=1 \
