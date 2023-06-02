@@ -1,0 +1,41 @@
+name: Create Swift WASM and Carton releases
+
+on:
+  workflow_dispatch:
+    inputs:
+      swift-version:
+        required: true
+        description: "Swift toolchain version"
+        default: '5.8.0'
+      carton-version:
+        required: true
+        description: "Carton toolchain version"
+        default: '0.19.0'
+
+jobs:
+  create-ubuntu-carton-build:
+    name: Create Swift WASM and Carton releases
+    runs-on: ubuntu-22.04
+
+    steps:
+      #- uses: Download swift toolchain
+      #  run: |
+      #    curl -L https://github.com/swiftwasm/swift/releases/download/swift-wasm-${{ inputs.swift-version }}-RELEASE/swift-wasm-${{ inputs.swift-version }}-RELEASE-ubuntu22.04_x86_64.tar.gz -o swift-toolcahin.tar.gz
+      #    tar xf swift-toolcahin.tar.gz
+      #    mv swift-wasm-* swift-wasm-${{ inputs.swift-version }}
+
+      - name: Install dependencies
+        run: |
+          export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true 
+          sudo apt-get -q update
+          sudo apt-get -q install -y libedit2 libgcc-9-dev libpython2.7 libsqlite3-0 libstdc++-9-dev \
+            libxml2 libz3-dev zlib1g-dev build-essential libncurses5 libxkbcommon0 curl unzip
+
+      - name: Build carton
+        run: |
+          export CARTON_DEFAULT_TOOLCHAIN=wasm-${{ inputs.swift-version }}-version
+          git clone git@github.com:swiftwasm/carton.git --branch ${{ inputs.carton-version }} --single-branch
+          cd carton
+          ./install_ubuntu_deps.sh
+          swift build -c release
+          .build/release/carton --version
