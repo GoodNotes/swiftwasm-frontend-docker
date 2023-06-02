@@ -34,7 +34,7 @@ jobs:
       - name: Build carton
         run: |
           export CARTON_DEFAULT_TOOLCHAIN=wasm-${{ inputs.swift-version }}-version
-          git clone git@github.com:swiftwasm/carton.git --branch ${{ inputs.carton-version }} --single-branch
+          gh repo clone swiftwasm/carton -- --branch ${{ inputs.carton-version }} --single-branch
           cd carton
           ./install_ubuntu_deps.sh
           swift build -c release
