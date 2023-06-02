@@ -15,7 +15,7 @@ on:
 jobs:
   create-ubuntu-carton-build:
     name: Create Swift WASM and Carton releases
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
 
     steps:
       #- uses: Download swift toolchain
