@@ -54,12 +54,12 @@ jobs:
         id: create-build
         run: |
           wasm_tools_dir="swift-wasm-tools-${{ matrix.swift-version }}-ubuntu22.04"
-          echo "bundle_name=$wasm_tools_dir.tar.gz" | tee -a $GITHUB_OUTPUT
+          echo "bundle_name=$wasm_tools_dir.tar.lz4" | tee -a $GITHUB_OUTPUT
           mkdir -p $wasm_tools_dir
           mv carton/.build/release/carton $wasm_tools_dir/carton
           mv binaryen/bin/wasm-opt $wasm_tools_dir/wasm-opt
           mv wasm-${{ matrix.swift-version }}-RELEASE $wasm_tools_dir/
-          tar czf $wasm_tools_dir.tar.gz $wasm_tools_dir
+          tar cf - $wasm_tools_dir | lz4 > $wasm_tools_dir.tar.lz4
 
       - name: Compute release version number
         id: compute-version
