@@ -30,6 +30,13 @@ jobs:
           sudo apt-get -q install -y libedit2 libgcc-9-dev libpython2.7 libsqlite3-0 libstdc++-9-dev \
             libxml2 libz3-dev zlib1g-dev build-essential libncurses5 libxkbcommon0 curl unzip
 
+      - name: Install Binaryen tools
+        run: |
+          curl -L -v -o binaryen.tar.gz https://github.com/WebAssembly/binaryen/releases/download/version_113/binaryen-version_113-x86_64-linux.tar.gz
+          tar xzvf binaryen.tar.gz
+          mv binaryen-version_113 binaryen
+          cp binaryen/bin/* /usr/local/bin
+
       - name: Build carton
         env:
           GH_TOKEN: ${{ github.token }}
@@ -37,7 +44,6 @@ jobs:
           export CARTON_DEFAULT_TOOLCHAIN=wasm-${{ inputs.swift-version }}-version
           gh repo clone swiftwasm/carton -- --branch ${{ inputs.carton-version }} --single-branch
           cd carton
-          ./install_ubuntu_deps.sh
           swift build -c release
           .build/release/carton --version
 
@@ -54,6 +60,7 @@ jobs:
           echo "bundle_name=$wasm_tools_dir.tar.gz" | tee -a $GITHUB_OUTPUT
           mkdir -p $wasm_tools_dir
           mv carton/.build/release/carton $wasm_tools_dir/carton
+          mv binaryen/bin/wasm-opt $wasm_tools_dir/wasm-opt
           mv wasm-${{ inputs.swift-version }}-RELEASE $wasm_tools_dir/
           tar czf $wasm_tools_dir.tar.gz $wasm_tools_dir
 
