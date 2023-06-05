@@ -2,22 +2,19 @@ name: Create Swift WASM build tools
 
 on:
   workflow_dispatch:
-    inputs:
-      swift-version:
-        required: true
-        description: "Swift toolchain version"
-        default: "5.8.0"
-      carton-version:
-        required: true
-        description: "Carton toolchain version"
-        default: "0.19.0"
 
 jobs:
   create-ubuntu-carton-build:
-    name: Create Swift WASM build tools
+    name: Create Swift ${{ matrix.swift-version }} WASM build tools
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    strategy:
+      matrix:
+        swift-version: [5.8.0]
+        include:
+          - swift-version: 5.8.0
+            carton-version: 0.19.0
 
     steps:
       - name: Checkout the repo
@@ -41,27 +38,27 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          export CARTON_DEFAULT_TOOLCHAIN=wasm-${{ inputs.swift-version }}-version
-          gh repo clone swiftwasm/carton -- --branch ${{ inputs.carton-version }} --single-branch
+          export CARTON_DEFAULT_TOOLCHAIN=wasm-${{ matrix.swift-version }}-version
+          gh repo clone swiftwasm/carton -- --branch ${{ matrix.carton-version }} --single-branch
           cd carton
           swift build -c release
           .build/release/carton --version
 
-      - name: Download Swift ${{ inputs.swift-version }} toolchain
+      - name: Download Swift ${{ matrix.swift-version }} toolchain
         run: |
-          curl -L https://github.com/swiftwasm/swift/releases/download/swift-wasm-${{ inputs.swift-version }}-RELEASE/swift-wasm-${{ inputs.swift-version }}-RELEASE-ubuntu22.04_x86_64.tar.gz -o swift-toolcahin.tar.gz
+          curl -L https://github.com/swiftwasm/swift/releases/download/swift-wasm-${{ matrix.swift-version }}-RELEASE/swift-wasm-${{ matrix.swift-version }}-RELEASE-ubuntu22.04_x86_64.tar.gz -o swift-toolcahin.tar.gz
           tar xf swift-toolcahin.tar.gz
-          mv swift-wasm-* wasm-${{ inputs.swift-version }}-RELEASE
+          mv swift-wasm-* wasm-${{ matrix.swift-version }}-RELEASE
 
       - name: Create WASM build tools bundle
         id: create-build
         run: |
-          wasm_tools_dir="swift-wasm-tools-${{ inputs.swift-version }}-ubuntu22.04"
+          wasm_tools_dir="swift-wasm-tools-${{ matrix.swift-version }}-ubuntu22.04"
           echo "bundle_name=$wasm_tools_dir.tar.gz" | tee -a $GITHUB_OUTPUT
           mkdir -p $wasm_tools_dir
           mv carton/.build/release/carton $wasm_tools_dir/carton
           mv binaryen/bin/wasm-opt $wasm_tools_dir/wasm-opt
-          mv wasm-${{ inputs.swift-version }}-RELEASE $wasm_tools_dir/
+          mv wasm-${{ matrix.swift-version }}-RELEASE $wasm_tools_dir/
           tar czf $wasm_tools_dir.tar.gz $wasm_tools_dir
 
       - name: Compute release version number
