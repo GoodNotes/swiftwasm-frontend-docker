@@ -72,7 +72,7 @@ jobs:
         run: |
           gh repo clone realm/SwiftLint -- --branch ${{ matrix.swift-lint-version }} --single-branch
           cd SwiftLint
-          swift build -c release --product swiftlint
+          swift build -c release -Xswiftc -static-stdlib --product swiftlint
           .build/release/swiftlint --version
 
       - name: Create WASM build tools bundle
