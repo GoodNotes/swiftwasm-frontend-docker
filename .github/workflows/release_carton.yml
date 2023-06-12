@@ -86,7 +86,7 @@ jobs:
           mv swift-format/.build/release/swift-format $wasm_tools_dir/swift-format
           mv SwiftLint/.build/release/swiftlint $wasm_tools_dir/
           mv wasm-${{ matrix.swift-version }}-RELEASE $wasm_tools_dir/
-          tar cf - $wasm_tools_dir | lz4 > $wasm_tools_dir.tar.lz4
+          tar cf - $wasm_tools_dir | lz4 -12 > $wasm_tools_dir.tar.lz4
 
       - name: Compute release version number
         id: compute-version
