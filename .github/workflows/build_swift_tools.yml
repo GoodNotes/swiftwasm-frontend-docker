@@ -36,11 +36,6 @@ jobs:
           mv binaryen-version_113 binaryen
           cp binaryen/bin/* /usr/local/bin
 
-      - name: Setup Swift version
-        uses: swift-actions/setup-swift@v1
-        with:
-          swift-version: "5.8.0"
-
       - name: Build carton
         env:
           GH_TOKEN: ${{ github.token }}
