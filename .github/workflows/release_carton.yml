@@ -84,7 +84,6 @@ jobs:
           mv carton/.build/release/carton $wasm_tools_dir/carton
           mv binaryen/bin/wasm-opt $wasm_tools_dir/wasm-opt
           mv swift-format/.build/release/swift-format $wasm_tools_dir/swift-format
-          mv swift-format/.build/release/*.dylib $wasm_tools_dir/
           mv SwiftLint/.build/release/swiftlint $wasm_tools_dir/
           mv wasm-${{ matrix.swift-version }}-RELEASE $wasm_tools_dir/
           tar cf - $wasm_tools_dir | lz4 > $wasm_tools_dir.tar.lz4
