@@ -15,6 +15,8 @@ jobs:
         include:
           - swift-version: 5.8.0
             carton-version: 0.19.0
+            swift-format-version: 508.0.1
+            swift-lint-version: 0.52.2
 
     steps:
       - name: Checkout the repo
@@ -34,6 +36,11 @@ jobs:
           mv binaryen-version_113 binaryen
           cp binaryen/bin/* /usr/local/bin
 
+      - name: Setup Swift version
+        uses: swift-actions/setup-swift@v1
+        with:
+          swift-version: "5.8.0"
+
       - name: Build carton
         env:
           GH_TOKEN: ${{ github.token }}
@@ -50,6 +57,24 @@ jobs:
           tar xf swift-toolcahin.tar.gz
           mv swift-wasm-* wasm-${{ matrix.swift-version }}-RELEASE
 
+      - name: Build Swift-format version ${{ matrix.swift-format-version }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh repo clone apple/swift-format -- --branch ${{ matrix.swift-format-version }} --single-branch
+          cd swift-format
+          swift build -c release
+          .build/release/swift-format --version
+
+      - name: Build SwiftLint version ${{ matrix.swift-lint-version }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh repo clone realm/SwiftLint -- --branch ${{ matrix.swift-lint-version }} --single-branch
+          cd SwiftLint
+          swift build -c release -Xswiftc -static-stdlib -Xlinker -lCFURLSessionInterface -Xlinker -lCFXMLInterface -Xlinker -lcurl -Xlinker -lxml2 -Xswiftc -I. -Xlinker -fuse-ld=lld -Xlinker -L/usr/lib/swift/linux --product swiftlint
+          .build/release/swiftlint --version
+
       - name: Create WASM build tools bundle
         id: create-build
         run: |
@@ -58,6 +83,9 @@ jobs:
           mkdir -p $wasm_tools_dir
           mv carton/.build/release/carton $wasm_tools_dir/carton
           mv binaryen/bin/wasm-opt $wasm_tools_dir/wasm-opt
+          mv swift-format/.build/release/swift-format $wasm_tools_dir/swift-format
+          mv swift-format/.build/release/*.dylib $wasm_tools_dir/
+          mv SwiftLint/.build/release/swiftlint $wasm_tools_dir/
           mv wasm-${{ matrix.swift-version }}-RELEASE $wasm_tools_dir/
           tar cf - $wasm_tools_dir | lz4 > $wasm_tools_dir.tar.lz4
 
