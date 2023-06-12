@@ -27,7 +27,7 @@ jobs:
           export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true 
           sudo apt-get -q update
           sudo apt-get -q install -y libedit2 libgcc-9-dev libpython2.7 libsqlite3-0 libstdc++-9-dev \
-            libxml2 libz3-dev zlib1g-dev build-essential libncurses5 libxkbcommon0 curl unzip
+            libxml2 libz3-dev zlib1g-dev build-essential libncurses5 libxkbcommon0 curl unzip libcurl4-openssl-dev libxml2-dev
 
       - name: Install Binaryen tools
         run: |
