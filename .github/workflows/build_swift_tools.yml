@@ -16,7 +16,7 @@ jobs:
           - swift-version: 5.8.0
             carton-version: 0.19.0
             swift-format-version: 508.0.1
-            swift-lint-version: 0.52.2
+            swift-lint-version: 0.52.3
 
     steps:
       - name: Checkout the repo

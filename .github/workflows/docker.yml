@@ -46,7 +46,7 @@ jobs:
         push: ${{ github.event_name != 'pull_request' }}
         tags: ghcr.io/${{ env.REPOSITORY_LC }}:${{ env.DOCKER_TAG }} 
         build-args: |
-          SWIFLINT_DOCKER_IMAGE=ghcr.io/realm/swiftlint:0.46.5
+          SWIFLINT_DOCKER_IMAGE=ghcr.io/realm/swiftlint:0.52.3
           CARTON_TAG=0.19.1
           SWIFT_DOCKER_IMAGE=swift:5.8.0-jammy
           SWIFT_TAG=wasm-5.8.0-RELEASE
