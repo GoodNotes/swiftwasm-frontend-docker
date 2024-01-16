@@ -1,8 +1,6 @@
 ARG SWIFLINT_DOCKER_IMAGE
 ARG SWIFT_DOCKER_IMAGE
 
-FROM $SWIFLINT_DOCKER_IMAGE as swiftLint
-
 FROM $SWIFT_DOCKER_IMAGE as carton-builder
 ARG SWIFT_TAG
 ARG CARTON_TAG
@@ -13,20 +11,6 @@ RUN git clone https://github.com/swiftwasm/carton.git && \
     export CARTON_DEFAULT_TOOLCHAIN=$SWIFT_TAG && \
     swift build -c release && \
     mv .build/release/carton /usr/bin
-
-FROM $SWIFT_DOCKER_IMAGE as swift-format-builder
-
-ARG SWIFT_FORMAT_TAG 
-
-# FIXME(katei): The sed hack is required to pin the swift-syntax version to `0.50700.0`.
-# Without this hack, SwiftPM uses swift-syntax `0.50700.1`, which is incompatible with 5.7.0
-# Docker image. Remove the hack after Apple folks will release an image compatible with swift-syntax
-# `0.50700.1` (probably `swift:5.7.1`?)
-RUN git clone https://github.com/apple/swift-format.git && \
-    cd swift-format && \
-    git checkout "tags/$SWIFT_FORMAT_TAG" && \
-    sed -i -e 's/.upToNextMinor(from: "0.50700.0")/exact: "0.50700.0"/' Package.swift && \
-    swift build -c release
 
 FROM ubuntu:22.04 as binaryen
 
@@ -131,18 +115,11 @@ RUN wget --no-verbose -O /tmp/firefox.tar.bz2 \
   && rm /tmp/firefox.tar.bz2 \
   && ln -fs /opt/firefox/firefox /usr/bin/firefox
 
-# Intall swift lint from docker
-COPY --from=swiftLint /usr/bin/swiftlint /usr/bin/swiftlint
-COPY --from=swiftLint /usr/lib/libsourcekitdInProc.so /usr/lib/
-
 # Install latest carton tool
 COPY --from=carton-builder /usr/bin/carton /usr/bin/carton
 
 # Install latest binaryen tools (carton still uses some legacy version)
 COPY --from=binaryen binaryen-version_105/bin/* /usr/local/bin
-
-# Install swift format 
-COPY --from=swift-format-builder swift-format/.build/release/swift-format /usr/local/bin/swift-format
 
 COPY --from=symbolicator-builder wasm-split /usr/local/bin
 
@@ -153,8 +130,6 @@ RUN node --version
 RUN npm --version
 RUN npx --version
 RUN yarn --version
-RUN swiftlint --version
-RUN swift-format --version
 RUN cypress --version
 RUN wasm-opt --version
 RUN brotli --version

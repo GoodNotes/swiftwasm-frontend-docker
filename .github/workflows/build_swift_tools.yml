@@ -15,8 +15,6 @@ jobs:
         include:
           - swift-version: 5.9.1
             carton-version: 0.20.0
-            swift-format-version: 508.0.1
-            swift-lint-version: 0.52.3
 
     steps:
       - name: Checkout the repo
@@ -52,24 +50,6 @@ jobs:
           tar xf swift-toolcahin.tar.gz
           mv swift-wasm-* wasm-${{ matrix.swift-version }}-RELEASE
 
-      - name: Build Swift-format version ${{ matrix.swift-format-version }}
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh repo clone apple/swift-format -- --branch ${{ matrix.swift-format-version }} --single-branch
-          cd swift-format
-          swift build -c release
-          .build/release/swift-format --version
-
-      - name: Build SwiftLint version ${{ matrix.swift-lint-version }}
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh repo clone realm/SwiftLint -- --branch ${{ matrix.swift-lint-version }} --single-branch
-          cd SwiftLint
-          swift build -c release -Xswiftc -static-stdlib --product swiftlint
-          .build/release/swiftlint --version
-
       - name: Create WASM build tools bundle
         id: create-build
         run: |
@@ -78,8 +58,6 @@ jobs:
           mkdir -p $wasm_tools_dir
           mv carton/.build/release/carton $wasm_tools_dir/carton
           mv binaryen/bin/wasm-opt $wasm_tools_dir/wasm-opt
-          mv swift-format/.build/release/swift-format $wasm_tools_dir/swift-format
-          mv SwiftLint/.build/release/swiftlint $wasm_tools_dir/
           mv wasm-${{ matrix.swift-version }}-RELEASE $wasm_tools_dir/
           tar cf - $wasm_tools_dir | lz4 -12 > $wasm_tools_dir.tar.lz4
 
