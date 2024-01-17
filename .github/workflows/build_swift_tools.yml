@@ -11,10 +11,10 @@ jobs:
       contents: write
     strategy:
       matrix:
-        swift-version: [5.8.0]
+        swift-version: [5.9.1]
         include:
-          - swift-version: 5.8.0
-            carton-version: 0.19.0
+          - swift-version: 5.9.1
+            carton-version: 0.20.0
             swift-format-version: 508.0.1
             swift-lint-version: 0.52.3
 

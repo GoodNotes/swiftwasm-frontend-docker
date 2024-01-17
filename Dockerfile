@@ -93,6 +93,8 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     fonts-indic \
     fonts-thai-tlwg-ttf \
     unzip \
+    libu2f-udev \
+    libvulkan1 \
     && rm -rf /var/lib/apt/lists/*
 
 # Install yarn
