@@ -46,7 +46,7 @@ jobs:
         push: ${{ github.event_name != 'pull_request' }}
         tags: ghcr.io/${{ env.REPOSITORY_LC }}:${{ env.DOCKER_TAG }} 
         build-args: |
-          CARTON_TAG=0.20.0
+          CARTON_TAG=0.20.1
           SWIFT_DOCKER_IMAGE=swift:5.9.0-jammy
           SWIFT_TAG=wasm-5.9.1-RELEASE
           NODE_VERSION=18.x
